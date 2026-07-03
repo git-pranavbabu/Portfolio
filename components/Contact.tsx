@@ -22,7 +22,7 @@ export function Contact() {
               href={`mailto:${email}`}
               className="group flex items-center gap-3 rounded-lg border border-border bg-bg p-4 transition-all hover:border-accent hover:shadow-sm"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface text-accent ring-1 ring-border transition-colors group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface text-accent ring-1 ring-border transition-all group-hover:text-white group-hover:ring-accent group-hover:[background:var(--gradient-accent)] group-hover:shadow-md">
                 <MailIcon />
               </span>
               <span className="min-w-0 flex-1">
@@ -42,7 +42,7 @@ export function Contact() {
               rel="noopener noreferrer"
               className="group flex items-center gap-3 rounded-lg border border-border bg-bg p-4 transition-all hover:border-accent hover:shadow-sm"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface text-accent ring-1 ring-border transition-colors group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface text-accent ring-1 ring-border transition-all group-hover:text-white group-hover:ring-accent group-hover:[background:var(--gradient-accent)] group-hover:shadow-md">
                 <LinkedInIcon />
               </span>
               <span className="min-w-0 flex-1">
@@ -63,7 +63,7 @@ export function Contact() {
               rel="noopener noreferrer"
               className="group flex items-center gap-3 rounded-lg border border-border bg-bg p-4 transition-all hover:border-accent hover:shadow-sm"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface text-accent ring-1 ring-border transition-colors group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-surface text-accent ring-1 ring-border transition-all group-hover:text-white group-hover:ring-accent group-hover:[background:var(--gradient-accent)] group-hover:shadow-md">
                 <GitHubIcon />
               </span>
               <span className="min-w-0 flex-1">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SparkleIcon } from "../SparkleIcon";
 
 type Message = {
   role: "user" | "assistant";
@@ -75,23 +76,14 @@ export function ChatWidget() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Open chat"
-        className="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-lg transition-transform hover:scale-105 hover:bg-accent-hover"
+        className="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105"
+        style={{ background: "var(--gradient-accent)" }}
       >
-        <span className="absolute inset-0 rounded-full bg-accent opacity-30 transition-transform group-hover:scale-110" />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="relative"
-        >
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
+        <span
+          className="absolute inset-0 rounded-full opacity-40 transition-transform group-hover:scale-110"
+          style={{ background: "var(--gradient-accent)" }}
+        />
+        <SparkleIcon size={22} gradient={false} className="relative text-white" />
       </button>
     );
   }
@@ -145,8 +137,11 @@ export function ChatWidget() {
     >
       <div className="flex items-center justify-between border-b border-border bg-bg px-4 py-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
-            PB
+          <div
+            className="flex h-8 w-8 items-center justify-center rounded-full text-white"
+            style={{ background: "var(--gradient-accent)" }}
+          >
+            <SparkleIcon size={16} gradient={false} className="text-white" />
           </div>
           <div>
             <p className="text-sm font-semibold leading-tight">
@@ -171,7 +166,14 @@ export function ChatWidget() {
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3">
         {messages.length === 0 ? (
           <div className="space-y-3">
-            <div className="rounded-lg border border-border bg-bg p-3 text-sm text-text-muted">
+            <div
+              className="rounded-lg border border-border p-3 text-sm text-text-muted"
+              style={{ background: "var(--gradient-accent-soft)" }}
+            >
+              <div className="mb-1 inline-flex items-center gap-1.5 text-xs font-medium text-accent">
+                <SparkleIcon size={11} />
+                <span>About Pranav</span>
+              </div>
               Hi! I&apos;m an AI trained on Pranav&apos;s project docs and
               resume. Ask me anything about his work, skills, or background.
             </div>
@@ -200,16 +202,23 @@ export function ChatWidget() {
               className={`mb-3 flex gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
               {m.role === "assistant" && (
-                <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-semibold text-white">
-                  PB
+                <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-bg ring-1 ring-border">
+                  {streaming && i === messages.length - 1 ? (
+                    <span className="thinking-blob" aria-hidden />
+                  ) : (
+                    <SparkleIcon size={12} gradient />
+                  )}
                 </div>
               )}
               <div
                 className={`max-w-[80%] whitespace-pre-wrap rounded-lg px-3 py-2 text-sm leading-relaxed ${
-                  m.role === "user"
-                    ? "bg-accent text-white"
-                    : "bg-bg text-text"
+                  m.role === "user" ? "text-white" : "bg-bg text-text"
                 }`}
+                style={
+                  m.role === "user"
+                    ? { background: "var(--gradient-accent)" }
+                    : undefined
+                }
               >
                 {m.content}
                 {streaming &&

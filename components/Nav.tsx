@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SparkleIcon } from "./SparkleIcon";
 
 const links = [
   { href: "#about", label: "About" },
@@ -25,7 +26,6 @@ export function Nav() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // pick the topmost visible section
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort(
@@ -45,8 +45,12 @@ export function Nav() {
   return (
     <nav className="sticky top-0 z-30 w-full border-b border-border bg-bg/85 backdrop-blur-sm">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-3">
-        <a href="#top" className="font-semibold tracking-tight">
-          PB
+        <a
+          href="#top"
+          className="inline-flex items-center gap-1.5 font-semibold tracking-tight"
+        >
+          <SparkleIcon size={14} />
+          <span>PB</span>
         </a>
         <ul className="flex items-center gap-5 text-sm">
           {links.map((l) => {
