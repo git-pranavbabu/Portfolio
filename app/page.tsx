@@ -11,7 +11,9 @@ import { Skills } from "@/components/Skills";
 export default function Home() {
   return (
     <>
-      <Nav />
+      <div className="px-4 pt-4 sm:px-6 sm:pt-6">
+        <Nav />
+      </div>
       <main className="flex-1">
         <Hero />
         <Reveal>

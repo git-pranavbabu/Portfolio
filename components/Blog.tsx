@@ -11,24 +11,29 @@ export async function Blog() {
   );
 
   return (
-    <section
-      id="blog"
-      className="border-b border-border bg-bg px-6 py-16 sm:py-20"
-    >
-      <div className="mx-auto max-w-4xl">
-        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+    <section id="blog" className="section">
+      <div className="section-inner">
+        <h2
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-3"
+          style={{ fontFamily: "var(--font-heading)" }}
+        >
           Blog
         </h2>
-        <p className="mt-2 text-text-muted">
+        <p
+          className="text-lg mb-8 max-w-2xl"
+          style={{ color: "var(--color-muted)" }}
+        >
           Short notes on what I&apos;m building and learning. New posts ship
           whenever I have something worth saying.
         </p>
         {postsWithBody.length === 0 ? (
-          <div className="mt-8 rounded-lg border border-dashed border-border bg-surface p-8 text-center text-text-muted">
-            No posts yet — check back soon.
+          <div className="clay-card p-10 text-center">
+            <p style={{ color: "var(--color-muted)" }}>
+              No posts yet — check back soon.
+            </p>
           </div>
         ) : (
-          <div className="mt-8 grid gap-4">
+          <div className="grid gap-5">
             {postsWithBody.map(({ post, bodyHtml }) => (
               <BlogPostCard
                 key={post.slug}

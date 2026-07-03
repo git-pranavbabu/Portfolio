@@ -11,18 +11,21 @@ export async function Projects() {
   );
 
   return (
-    <section
-      id="projects"
-      className="border-b border-border bg-bg px-6 py-16 sm:py-20"
-    >
-      <div className="mx-auto max-w-4xl">
-        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+    <section id="projects" className="section">
+      <div className="section-inner">
+        <h2
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-3"
+          style={{ fontFamily: "var(--font-heading)" }}
+        >
           Projects
         </h2>
-        <p className="mt-2 text-text-muted">
+        <p
+          className="text-lg mb-8 max-w-2xl"
+          style={{ color: "var(--color-muted)" }}
+        >
           A few of the things I&apos;ve built. Tap any card to read more.
         </p>
-        <div className="mt-8 grid gap-4">
+        <div className="grid gap-5">
           {projectsWithBody.map(({ project, bodyHtml }) => (
             <ProjectCard
               key={project.slug}

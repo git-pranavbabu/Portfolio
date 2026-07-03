@@ -13,41 +13,70 @@ export function ProjectCard({ project, bodyHtml }: Props) {
   const hasBody = bodyHtml.length > 0;
 
   return (
-    <article className="rounded-lg border border-border bg-surface transition-colors hover:border-accent/40">
+    <article
+      className={`clay-card ${hasBody ? "clay-card-interactive" : ""} p-7 sm:p-9`}
+      onClick={() => hasBody && setOpen((v) => !v)}
+    >
       <button
         type="button"
-        onClick={() => hasBody && setOpen((v) => !v)}
-        className="flex w-full flex-col gap-3 px-6 py-5 text-left disabled:cursor-default"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+        className="flex w-full flex-col gap-4 text-left"
         disabled={!hasBody}
         aria-expanded={open}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold tracking-tight">
+            <h3
+              className="text-xl sm:text-2xl font-extrabold tracking-tight"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
               {project.title}
             </h3>
             {project.hykon && (
-              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-accent">
+              <p
+                className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
+                style={{ color: "var(--color-accent)" }}
+              >
+                <span
+                  className="inline-block h-1.5 w-1.5 rounded-full"
+                  style={{ background: "var(--color-accent)" }}
+                />
                 Built at Hykon India Limited
               </p>
             )}
           </div>
           {hasBody && (
             <span
-              className={`mt-1 text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-2xl text-lg font-bold transition-transform"
+              style={{
+                background: "var(--color-card-solid)",
+                color: "var(--color-accent)",
+                boxShadow:
+                  "4px 4px 10px rgba(160, 150, 180, 0.15), -2px -2px 6px rgba(255, 255, 255, 0.85), inset 1px 1px 2px rgba(255, 255, 255, 0.6)",
+                transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              }}
               aria-hidden
             >
               ▾
             </span>
           )}
         </div>
-        <p className="text-text-muted">{project.oneLiner}</p>
+        <p
+          className="text-base leading-relaxed"
+          style={{ color: "var(--color-muted)" }}
+        >
+          {project.oneLiner}
+        </p>
         {project.tech.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {project.tech.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-border bg-bg px-2.5 py-0.5 text-xs text-text-muted"
+                className="clay-pill"
+                style={{ fontSize: "0.7rem", padding: "0.3rem 0.75rem" }}
               >
                 {t}
               </span>
@@ -64,10 +93,10 @@ export function ProjectCard({ project, bodyHtml }: Props) {
                 href={project.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-accent transition-opacity hover:opacity-70"
+                className="inline-flex items-center gap-1 font-bold"
+                style={{ color: "var(--color-accent)", fontFamily: "var(--font-heading)" }}
               >
-                GitHub
-                <ExternalIcon />
+                GitHub <ExternalIcon />
               </a>
             )}
             {project.links.live && (
@@ -75,10 +104,10 @@ export function ProjectCard({ project, bodyHtml }: Props) {
                 href={project.links.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-accent transition-opacity hover:opacity-70"
+                className="inline-flex items-center gap-1 font-bold"
+                style={{ color: "var(--color-accent)", fontFamily: "var(--font-heading)" }}
               >
-                Live
-                <ExternalIcon />
+                Live <ExternalIcon />
               </a>
             )}
           </div>
@@ -86,11 +115,19 @@ export function ProjectCard({ project, bodyHtml }: Props) {
       </button>
 
       {hasBody && (
-        <div className={`collapsible-content ${open ? "open" : ""}`}>
+        <div className={`collapsible-content ${open ? "open" : ""} mt-5`}>
           <div>
-            <div className="border-t border-border px-6 py-5">
+            <div
+              className="rounded-[24px] border p-6 sm:p-8"
+              style={{
+                background: "var(--color-canvas-2)",
+                borderColor: "var(--color-border)",
+                boxShadow:
+                  "inset 4px 4px 8px rgba(160, 150, 180, 0.12), inset -2px -2px 6px rgba(255, 255, 255, 0.6)",
+              }}
+            >
               <div
-                className="prose-content text-text"
+                className="prose-content"
                 dangerouslySetInnerHTML={{ __html: bodyHtml }}
               />
             </div>
@@ -110,7 +147,7 @@ function ExternalIcon() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden

@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans, Nunito } from "next/font/google";
 import "./globals.css";
+import { BackgroundBlobs } from "@/components/BackgroundBlobs";
 import { ChatWidget } from "@/components/ChatWidget/ChatWidget";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["700", "800", "900"],
+  variable: "--font-nunito",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -61,13 +70,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${nunito.variable} ${dmSans.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <script
-          dangerouslySetInnerHTML={{ __html: noFlashScript }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
       </head>
-      <body className="min-h-screen flex flex-col bg-bg text-text">
+      <body className="min-h-screen flex flex-col">
+        <BackgroundBlobs />
         <ThemeProvider>{children}</ThemeProvider>
         <ChatWidget />
       </body>

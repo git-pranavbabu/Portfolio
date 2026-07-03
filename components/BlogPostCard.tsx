@@ -24,26 +24,45 @@ export function BlogPostCard({ post, bodyHtml }: Props) {
   const hasBody = bodyHtml.length > 0;
 
   return (
-    <article className="rounded-lg border border-border bg-surface transition-colors hover:border-accent/40">
+    <article
+      className={`clay-card ${hasBody ? "clay-card-interactive" : ""} p-7 sm:p-9`}
+      onClick={() => hasBody && setOpen((v) => !v)}
+    >
       <button
         type="button"
-        onClick={() => hasBody && setOpen((v) => !v)}
-        className="flex w-full flex-col gap-2 px-6 py-5 text-left disabled:cursor-default"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+        className="flex w-full flex-col gap-3 text-left"
         disabled={!hasBody}
         aria-expanded={open}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold tracking-tight">
-              {post.title}
-            </h3>
-            <p className="mt-1 text-xs text-text-muted">
+            <p
+              className="text-xs font-bold uppercase tracking-wider mb-1"
+              style={{ color: "var(--color-accent)" }}
+            >
               {formatDate(post.date)}
             </p>
+            <h3
+              className="text-xl sm:text-2xl font-extrabold tracking-tight"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              {post.title}
+            </h3>
           </div>
           {hasBody && (
             <span
-              className={`mt-1 text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-2xl text-lg font-bold transition-transform"
+              style={{
+                background: "var(--color-card-solid)",
+                color: "var(--color-accent)",
+                boxShadow:
+                  "4px 4px 10px rgba(160, 150, 180, 0.15), -2px -2px 6px rgba(255, 255, 255, 0.85), inset 1px 1px 2px rgba(255, 255, 255, 0.6)",
+                transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              }}
               aria-hidden
             >
               ▾
@@ -51,16 +70,29 @@ export function BlogPostCard({ post, bodyHtml }: Props) {
           )}
         </div>
         {post.summary && (
-          <p className="text-text-muted">{post.summary}</p>
+          <p
+            className="text-base leading-relaxed"
+            style={{ color: "var(--color-muted)" }}
+          >
+            {post.summary}
+          </p>
         )}
       </button>
 
       {hasBody && (
-        <div className={`collapsible-content ${open ? "open" : ""}`}>
+        <div className={`collapsible-content ${open ? "open" : ""} mt-5`}>
           <div>
-            <div className="border-t border-border px-6 py-5">
+            <div
+              className="rounded-[24px] border p-6 sm:p-8"
+              style={{
+                background: "var(--color-canvas-2)",
+                borderColor: "var(--color-border)",
+                boxShadow:
+                  "inset 4px 4px 8px rgba(160, 150, 180, 0.12), inset -2px -2px 6px rgba(255, 255, 255, 0.6)",
+              }}
+            >
               <div
-                className="prose-content text-text"
+                className="prose-content"
                 dangerouslySetInnerHTML={{ __html: bodyHtml }}
               />
             </div>

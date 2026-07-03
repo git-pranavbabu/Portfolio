@@ -44,23 +44,43 @@ export function Nav() {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-30 w-full border-b border-border bg-bg/85 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-3">
+    <div className="sticky top-4 z-30 w-full" style={{ zIndex: 30 }}>
+      <nav
+        className="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-[28px] border px-4 py-2.5 sm:px-6 sm:py-3"
+        style={{
+          background: "var(--color-nav-bg)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderColor: "var(--color-border)",
+          boxShadow:
+            "8px 8px 20px rgba(160, 150, 180, 0.18), -6px -6px 16px rgba(255, 255, 255, 0.85), inset 2px 2px 4px rgba(255, 255, 255, 0.6)",
+        }}
+      >
         <a
           href="#top"
-          className="inline-flex items-center gap-1.5 font-semibold tracking-tight"
+          className="inline-flex items-center gap-2 font-black tracking-tight"
+          style={{ fontFamily: "var(--font-heading)" }}
         >
-          <SparkleIcon size={14} />
-          <span>PB</span>
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-2xl"
+            style={{
+              background: "var(--gradient-primary)",
+              boxShadow:
+                "4px 4px 10px rgba(139, 92, 246, 0.3), -2px -2px 6px rgba(255, 255, 255, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.3)",
+            }}
+          >
+            <SparkleIcon size={16} gradient={false} className="text-white" />
+          </div>
+          <span className="text-base">Pranav</span>
         </a>
-        <ul className="flex items-center gap-5 text-sm">
+        <ul className="hidden items-center gap-1 text-sm md:flex">
           {links.map((l) => {
             const isActive = active === l.href;
             return (
               <li key={l.href}>
                 <a
                   href={l.href}
-                  className={`nav-link ${isActive ? "active" : ""}`}
+                  className={`nav-link-clay ${isActive ? "active" : ""}`}
                   aria-current={isActive ? "true" : undefined}
                 >
                   {l.label}
@@ -70,7 +90,7 @@ export function Nav() {
           })}
         </ul>
         <ThemeToggle />
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
