@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ChatWidget } from "@/components/ChatWidget/ChatWidget";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,15 +39,36 @@ export const metadata: Metadata = {
   },
 };
 
+const noFlashScript = `
+(function() {
+  try {
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = stored === 'light' || stored === 'dark'
+      ? stored
+      : (prefersDark ? 'dark' : 'light');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    document.documentElement.style.colorScheme = theme;
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: noFlashScript }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-bg text-text">
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
         <ChatWidget />
       </body>
     </html>

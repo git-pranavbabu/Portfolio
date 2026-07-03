@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SparkleIcon } from "./SparkleIcon";
+import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
   { href: "#about", label: "About" },
@@ -44,7 +45,7 @@ export function Nav() {
 
   return (
     <nav className="sticky top-0 z-30 w-full border-b border-border bg-bg/85 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-3">
+      <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-3">
         <a
           href="#top"
           className="inline-flex items-center gap-1.5 font-semibold tracking-tight"
@@ -68,6 +69,7 @@ export function Nav() {
             );
           })}
         </ul>
+        <ThemeToggle />
       </div>
     </nav>
   );

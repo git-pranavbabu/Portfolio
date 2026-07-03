@@ -195,28 +195,67 @@ the resume's `## Tech` section, which is what gets embedded.)
 
 ## 6. How to change colors, fonts, and the design
 
-All design tokens live in **`app/globals.css`** at the top, inside the `@theme inline` block:
+All design tokens live in **`app/globals.css`** at the top, in two blocks: `:root` (light mode) and `.dark` (dark mode). All components reference these variables, so changing them updates the whole site.
 
 ```css
-@theme inline {
-  --color-bg: #fafafa;           /* page background */
-  --color-text: #111111;         /* body text */
-  --color-text-muted: #6b7280;   /* secondary text */
-  --color-accent: #2563eb;       /* primary accent (links, buttons) */
-  --color-accent-hover: #1d4ed8; /* accent on hover */
-  --color-border: #e5e7eb;       /* subtle borders */
-  --color-surface: #ffffff;      /* card / panel background */
-  --font-sans: var(--font-inter), system-ui, ...;
+:root {
+  --color-bg: #fafafa;             /* page background */
+  --color-text: #111111;           /* body text */
+  --color-text-muted: #6b7280;     /* secondary text */
+  --color-accent: #2563eb;         /* primary accent (links, buttons) */
+  --color-accent-hover: #1d4ed8;   /* accent on hover */
+  --color-border: #e5e7eb;         /* subtle borders */
+  --color-surface: #ffffff;        /* card / panel background */
+  --color-surface-2: #f3f4f6;      /* secondary surface (code blocks, etc.) */
+  --color-prose-code: #f3f4f6;     /* inline code background */
+  --color-shadow: rgba(15, 23, 42, 0.04);
+  --color-shadow-hover: rgba(79, 70, 229, 0.28);
+  --color-blob-opacity: 0.4;
+  --color-nav-bg: rgba(250, 250, 250, 0.85);
+}
+
+.dark {
+  --color-bg: #0a0a0a;
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
+  --color-border: #262626;
+  --color-surface: #171717;
+  --color-surface-2: #1f1f1f;
+  --color-prose-code: #262626;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-shadow-hover: rgba(96, 165, 250, 0.32);
+  --color-blob-opacity: 0.28;
+  --color-nav-bg: rgba(10, 10, 10, 0.85);
 }
 ```
 
-Change any of these and the whole site updates. The button styles, animations, and chat widget also reference these tokens — so you usually only need to change them in this one place.
+To recolor the site, edit the values in **both** blocks (or just the ones you want to change). The toggle in the Nav (sun/moon icon) switches between the two — see section "How dark mode works" below.
+
+The gradient colors (`--gradient-accent`, `--gradient-accent-soft`, `--gradient-text`, `--gradient-thinking`) live in `:root` only and are the same in both modes — they're brand colors, not surface colors.
 
 To switch the font, edit `app/layout.tsx` (look for `import { Inter } from "next/font/google"`) and update `--font-sans` in `globals.css`.
 
 > **Tailwind v4 caveat**: this project uses Tailwind v4 with CSS-based
 > theming (`@theme inline`), NOT a `tailwind.config.ts` file. Don't
 > add config the old way — it won't take effect.
+
+## 6a. How dark mode works
+
+- **Default**: follows the user's OS preference (`prefers-color-scheme`). If your OS is set to dark, the site loads in dark. If light, it loads in light.
+- **Toggle**: there's a sun/moon icon button in the top-right of the Nav. Click it to switch. Your choice is saved in `localStorage` under the key `"theme"`.
+- **If you haven't toggled**: the site follows your OS preference. If you change your OS theme, the site updates too.
+- **If you have toggled**: the site stays in your chosen mode regardless of OS.
+- **No flash**: a small inline script in `app/layout.tsx` (search for `noFlashScript`) runs before React hydrates and applies the correct class to `<html>`, so dark-mode users never see a light-mode flash.
+
+To force a specific mode by default (e.g. always dark for this site), edit `app/globals.css` and remove the `prefers-color-scheme` fallback in the no-flash script, or change `getInitialTheme` in `components/ThemeProvider.tsx`.
+
+To remove dark mode entirely:
+1. Delete the `.dark { ... }` block in `app/globals.css`
+2. Remove the `<ThemeToggle />` line from `components/Nav.tsx`
+3. Remove the no-flash script from `app/layout.tsx`
+4. Remove the `<ThemeProvider>` wrapper from `app/layout.tsx`
 
 ---
 
