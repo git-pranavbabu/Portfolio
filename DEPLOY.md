@@ -1,6 +1,6 @@
 # Deploy & Verification — User Action Items
 
-The site code is complete, committed, and pushed to `github.com/git-pranavbabu/Portfolio`. The following user-action items are required to make the site live at `https://www.0121210.xyz`.
+The site code is complete, committed, and pushed to `github.com/git-pranavbabu/Portfolio`. The following user-action items are required to make the site live at `https://pranav-portfolio.0121210.xyz`.
 
 > **Note on Gemini models**: The plan assumed `text-embedding-004` and `gemini-1.5-flash`. On the API key you provided, neither was available, so the code uses **`gemini-embedding-001`** (with `outputDimensionality: 768`, so the pgvector schema is unchanged) and a **fallback chain** for generation: `gemini-2.5-flash` → `gemini-3.5-flash` → `gemini-3.1-flash-lite`. The chain auto-falls-back only on 429/503 rate-limit responses; other errors surface normally. All models verified end-to-end against your Supabase project.
 
@@ -73,21 +73,21 @@ Once the build is green, Vercel gives you a `*.vercel.app` URL. Test it before c
 
 ---
 
-## 4. Connect `www.0121210.xyz` (5 min + DNS propagation)
+## 4. Connect `pranav-portfolio.0121210.xyz` (5 min + DNS propagation)
 
 1. In Vercel: open your project → **Settings** → **Domains**.
-2. Type `www.0121210.xyz` and click **Add**.
-3. Vercel will display the exact DNS records you need (typically an `A` record for the root and a `CNAME` for `www`).
-4. In Namecheap: go to **Domain List** → click **Manage** next to your domain → **Advanced DNS**.
-5. Add the records Vercel gave you. Use the values Vercel shows — do not copy from elsewhere.
+2. Type `pranav-portfolio.0121210.xyz` and click **Add**.
+3. Vercel will display the exact DNS records you need (typically a `CNAME` for a subdomain, pointing to `cname.vercel-dns.com`).
+4. In Namecheap: go to **Domain List** → click **Manage** next to `0121210.xyz` → **Advanced DNS**.
+5. Add the records Vercel gave you. Use the values Vercel shows — do not copy from elsewhere. For a subdomain like `pranav-portfolio`, you typically only need a `CNAME` record.
 6. Wait for DNS propagation (usually under 30 min, can take up to 24h).
 7. Vercel will automatically issue a Let's Encrypt SSL cert once DNS resolves.
 
 You can check propagation from any terminal:
 ```bash
-nslookup www.0121210.xyz
+nslookup pranav-portfolio.0121210.xyz
 # or
-Resolve-DnsName www.0121210.xyz
+Resolve-DnsName pranav-portfolio.0121210.xyz
 ```
 
 ---
@@ -112,7 +112,7 @@ Vercel auto-deploys on every push. Update `content/resume.md` with your real res
 
 Once the domain resolves, run through this checklist:
 
-- [ ] `https://www.0121210.xyz/` loads
+- [ ] `https://pranav-portfolio.0121210.xyz/` loads
 - [ ] All sections visible: Hero, About, Projects, Skills, Blog, Contact, Footer
 - [ ] Each project card expands/collapses when clicked
 - [ ] Blog post card expands/collapses

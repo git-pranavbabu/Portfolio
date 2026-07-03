@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.0121210.xyz"),
+  metadataBase: new URL("https://pranav-portfolio.0121210.xyz"),
   title: {
     default: "Pranav Babu — AI Engineer",
     template: "%s | Pranav Babu — AI Engineer",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.0121210.xyz",
+    url: "https://pranav-portfolio.0121210.xyz",
     siteName: "Pranav Babu — AI Engineer",
     title: "Pranav Babu — AI Engineer",
     description:

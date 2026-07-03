@@ -1,6 +1,6 @@
 # Pranav Babu — Portfolio
 
-Personal portfolio site with an embedded RAG-based AI agent trained on my project docs. Live at **www.0121210.xyz**.
+Personal portfolio site with an embedded RAG-based AI agent trained on my project docs. Live at **pranav-portfolio.0121210.xyz**.
 
 ## Stack
 

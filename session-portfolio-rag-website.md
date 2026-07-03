@@ -7,7 +7,7 @@
 - **5 collapsible project cards** on homepage (no detail pages), 4 Hykon-captioned + 1 personal (Evocode)
 - **Floating AI chat widget** (bottom-right, site-wide) with 5 preset chips, single-turn, streaming SSE, scope-locked to projects+resume
 - **RAG**: 5 project READMEs + `content/resume.md` → chunked → Gemini `text-embedding-004` (768-dim) → Supabase pgvector → Gemini LLM answer generation
-- **Free tier only**: Vercel + Supabase + Gemini + Namecheap → `www.0121210.xyz`
+- **Free tier only**: Vercel + Supabase + Gemini + Namecheap → `pranav-portfolio.0121210.xyz`
 - **Repo**: `github.com/git-pranavbabu/Portfolio` (empty, CC0-1.0 license)
 - **No phone, no dark mode, no rate limit, no multi-turn, no analytics, no per-project pages** — all deferred
 - **User comfortable** with Next.js, React, embeddings/RAG, Node + Python
@@ -28,7 +28,7 @@
 ---
 
 ## Domain & Hosting
-- **Domain**: `www.0121210.xyz` (Namecheap → Vercel)
+- **Domain**: `pranav-portfolio.0121210.xyz` (Namecheap → Vercel)
 - **Hosting**: Vercel (free tier)
 - **Repo**: `github.com/git-pranavbabu/Portfolio` (currently empty)
 - **License**: CC0-1.0 (kept as-is)
@@ -214,7 +214,7 @@ Question:
 8. Connect repo to Vercel (one-click)
 9. Add env vars in Vercel dashboard
 10. Add domain in Vercel → point Namecheap DNS to Vercel records
-11. Wait for DNS propagation (verify `dig www.0121210.xyz`)
+11. Wait for DNS propagation (verify `dig pranav-portfolio.0121210.xyz`)
 12. Verify on production domain
 
 ---
