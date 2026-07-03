@@ -1,0 +1,22 @@
+[
+  {
+    "category": "Languages",
+    "skills": ["Python", "JavaScript", "TypeScript", "Deluge"]
+  },
+  {
+    "category": "AI / Agents",
+    "skills": ["LangGraph", "LLM agents", "RAG pipelines", "Embeddings", "Prompt engineering"]
+  },
+  {
+    "category": "Backend",
+    "skills": ["FastAPI", "Google Firestore", "REST APIs", "Serverless functions"]
+  },
+  {
+    "category": "Frontend",
+    "skills": ["React", "Chrome Extension APIs", "Next.js", "Tailwind CSS"]
+  },
+  {
+    "category": "Tools & Platforms",
+    "skills": ["Git", "GitHub", "Vercel", "Supabase", "Zoho Deluge"]
+  }
+]
