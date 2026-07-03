@@ -1,14 +1,18 @@
-import "dotenv/config";
+import { config as loadEnv } from "dotenv";
 import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Pool } from "pg";
 
+loadEnv({ path: ".env.local" });
+loadEnv({ path: ".env" });
+
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const PROJECTS_DIR = path.join(CONTENT_DIR, "projects");
 const RESUME_PATH = path.join(CONTENT_DIR, "resume.md");
-const EMBEDDING_MODEL = "text-embedding-004";
+const EMBEDDING_MODEL = "gemini-embedding-001";
+const EMBEDDING_DIM = 768;
 const TARGET_WORDS_PER_CHUNK = 400;
 const MAX_CHARS_PER_CHUNK = TARGET_WORDS_PER_CHUNK * 6; // soft cap
 
@@ -70,57 +74,80 @@ async function listSources(projectFilter: string | null): Promise<SourceFile[]> 
   return sources;
 }
 
-function chunkMarkdown(md: string): string[] {
+type ChunkMeta = {
+  prefix: string;
+};
+
+function chunkMarkdown(md: string, meta: ChunkMeta): string[] {
   const { content } = matter(md);
-  const paragraphs = content
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0);
 
-  const chunks: string[] = [];
-  let current = "";
-  let currentWords = 0;
-
-  for (const p of paragraphs) {
-    const words = p.split(/\s+/).length;
-
-    if (currentWords + words > TARGET_WORDS_PER_CHUNK * 1.4 && current.length > 0) {
-      chunks.push(current.trim());
-      current = p;
-      currentWords = words;
-      continue;
+  // Split on `## ` headers first so each section is a discrete semantic unit.
+  const sections: string[] = [];
+  const lines = content.split("\n");
+  let current: string[] = [];
+  for (const line of lines) {
+    if (/^##\s+/.test(line) && current.length > 0) {
+      sections.push(current.join("\n").trim());
+      current = [line];
+    } else {
+      current.push(line);
     }
-
-    if (p.length > MAX_CHARS_PER_CHUNK) {
-      // long paragraph — split by sentences
-      const sentences = p.split(/(?<=[.!?])\s+/);
-      for (const s of sentences) {
-        if (current.length + s.length > MAX_CHARS_PER_CHUNK && current.length > 0) {
-          chunks.push(current.trim());
-          current = s;
-        } else {
-          current = current ? `${current} ${s}` : s;
-        }
-      }
-      currentWords = current.split(/\s+/).length;
-      continue;
-    }
-
-    current = current ? `${current}\n\n${p}` : p;
-    currentWords += words;
+  }
+  if (current.length > 0) {
+    const tail = current.join("\n").trim();
+    if (tail) sections.push(tail);
   }
 
-  if (current.trim().length > 0) {
-    chunks.push(current.trim());
+  const chunks: string[] = [];
+  for (const section of sections) {
+    if (section.length === 0) continue;
+
+    const withPrefix = `${meta.prefix}\n\n${section}`;
+
+    if (withPrefix.length <= MAX_CHARS_PER_CHUNK) {
+      chunks.push(withPrefix);
+      continue;
+    }
+
+    // long section — split by paragraphs
+    const paragraphs = section
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .filter((p) => p.length > 0);
+
+    let buf = "";
+    for (const p of paragraphs) {
+      const candidate = buf ? `${buf}\n\n${p}` : p;
+      const withPrefixCandidate = `${meta.prefix}\n\n${candidate}`;
+      if (withPrefixCandidate.length > MAX_CHARS_PER_CHUNK && buf.length > 0) {
+        chunks.push(`${meta.prefix}\n\n${buf}`);
+        buf = p;
+      } else {
+        buf = candidate;
+      }
+    }
+    if (buf) chunks.push(`${meta.prefix}\n\n${buf}`);
   }
 
   return chunks;
 }
 
+function projectTitle(slug: string): string {
+  // Pull the project title from the frontmatter
+  // (caller passes the project metadata via listSources)
+  return slug
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 async function embed(genai: GoogleGenerativeAI, text: string): Promise<number[]> {
   const model = genai.getGenerativeModel({ model: EMBEDDING_MODEL });
-  const result = await model.embedContent(text);
-  return result.embedding.values;
+  const result = await model.embedContent({
+    content: { role: "user", parts: [{ text }] },
+    outputDimensionality: EMBEDDING_DIM,
+  } as Parameters<typeof model.embedContent>[0]);
+  return result.embedding!.values!;
 }
 
 async function clearProject(pool: Pool, project: string) {
@@ -159,7 +186,11 @@ async function main() {
   for (const src of sources) {
     console.log(`\n→ ${src.source} (project: ${src.project})`);
     const md = await fs.readFile(src.filePath, "utf-8");
-    const chunks = chunkMarkdown(md);
+    const prefix =
+      src.project === "resume"
+        ? "Source: Pranav Babu's resume."
+        : `Source: a project by Pranav Babu called "${projectTitle(src.project)}" (slug: ${src.project}).`;
+    const chunks = chunkMarkdown(md, { prefix });
     console.log(`  ${chunks.length} chunk(s)`);
 
     if (projectFilter) {

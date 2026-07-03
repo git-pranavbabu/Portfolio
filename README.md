@@ -7,7 +7,7 @@ Personal portfolio site with an embedded RAG-based AI agent trained on my projec
 - **Next.js 16** (App Router) + **TypeScript** + **Tailwind CSS v4**
 - **Vercel** for hosting and serverless functions
 - **Supabase (pgvector)** for the vector store
-- **Gemini API** for embeddings (`text-embedding-004`) and answer generation (`gemini-1.5-flash`)
+- **Gemini API** for embeddings (`gemini-embedding-001`, 768-dim) and answer generation with a fallback chain (`gemini-2.5-flash` → `gemini-3.5-flash` → `gemini-3.1-flash-lite`, streaming)
 
 ## Local development
 

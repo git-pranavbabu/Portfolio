@@ -2,6 +2,8 @@
 
 The site code is complete, committed, and pushed to `github.com/git-pranavbabu/Portfolio`. The following user-action items are required to make the site live at `https://www.0121210.xyz`.
 
+> **Note on Gemini models**: The plan assumed `text-embedding-004` and `gemini-1.5-flash`. On the API key you provided, neither was available, so the code uses **`gemini-embedding-001`** (with `outputDimensionality: 768`, so the pgvector schema is unchanged) and a **fallback chain** for generation: `gemini-2.5-flash` → `gemini-3.5-flash` → `gemini-3.1-flash-lite`. The chain auto-falls-back only on 429/503 rate-limit responses; other errors surface normally. All models verified end-to-end against your Supabase project.
+
 ---
 
 ## 1. Supabase setup (5 min)
@@ -9,10 +11,9 @@ The site code is complete, committed, and pushed to `github.com/git-pranavbabu/P
 1. Go to https://supabase.com/dashboard and create a new project (free tier is fine).
 2. Once the project is ready, open the **SQL Editor** and run the contents of `supabase/schema.sql` from this repo. This creates the `pgvector` extension, the `documents` table, and the index.
 3. From **Project Settings → Database**, copy:
-   - **Connection string** (Direct / port 5432) → for the local ingest script
-   - **Connection string** (Transaction mode / port 6543) → for the Vercel serverless function (handles more concurrent connections)
    - **Project URL** (`https://xxxxx.supabase.co`) → `SUPABASE_URL`
    - **Service role key** (under API keys, NOT the anon key) → `SUPABASE_SERVICE_ROLE_KEY`
+   - **Connection string** → `DATABASE_URL`. Prefer the **Transaction mode** pooler (port 6543) — the direct hostname (port 5432) often resolves to IPv6 only, which breaks from IPv4-only networks. URL-encode any special characters in the password (e.g. `:` → `%3A`).
 
 Keep these four values safe — you'll use them in step 2 and step 3.
 
@@ -25,8 +26,11 @@ Open `C:\Users\mepra\gitRepo\portfolio_website\.env.local` in your editor and fi
 ```env
 SUPABASE_URL=https://xxxxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
-GEMINI_API_KEY=AIza...
-DATABASE_URL=postgresql://postgres:PASSWORD@db.xxxxx.supabase.co:5432/postgres
+GEMINI_API_KEY=...
+# Use the Supabase pooler (port 6543) for the connection string — the direct
+# host (port 5432) often has IPv6-only DNS that breaks from some networks.
+# URL-encode any special characters in the password (e.g. ":" becomes "%3A").
+DATABASE_URL=postgresql://postgres.<project-ref>:<password>@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres
 ```
 
 Then from the portfolio folder, run:

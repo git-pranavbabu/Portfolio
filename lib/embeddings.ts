@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const EMBEDDING_MODEL = "text-embedding-004";
+const EMBEDDING_MODEL = "gemini-embedding-001";
+const EMBEDDING_DIM = 768;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -19,6 +20,9 @@ function getClient(): GoogleGenerativeAI {
 export async function embedQuery(text: string): Promise<number[]> {
   const genai = getClient();
   const model = genai.getGenerativeModel({ model: EMBEDDING_MODEL });
-  const result = await model.embedContent(text);
-  return result.embedding.values;
+  const result = await model.embedContent({
+    content: { role: "user", parts: [{ text }] },
+    outputDimensionality: EMBEDDING_DIM,
+  } as Parameters<typeof model.embedContent>[0]);
+  return result.embedding!.values!;
 }
